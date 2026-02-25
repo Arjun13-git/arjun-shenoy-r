@@ -45,7 +45,7 @@ export default function HeroScene() {
             </mesh>
             <Environment preset="night" />
           </Suspense>
-          <EffectComposer disableNormalPass>
+          <EffectComposer>
             <Bloom luminanceThreshold={0.2} mipmapBlur intensity={1.2} />
             <Noise opacity={0.04} />
             <Vignette eskil={false} offset={0.1} darkness={1.1} />
