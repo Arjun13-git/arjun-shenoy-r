@@ -29,8 +29,8 @@ This project is a highly interactive, cinematic 3D web experience built to showc
 - **Post-Processing Pipeline:**  
   Utilizes Bloom, Noise, and Vignette effects to create a gritty, film-like aesthetic.
 
-- **Integrated Analytics:**  
-  Real-time traffic and performance monitoring via Vercel Analytics.
+<!-- - **Integrated Analytics:**  
+  Real-time traffic and performance monitoring via Vercel Analytics. -->
 
 ---
 
