@@ -108,7 +108,7 @@ export default function HeroScene() {
           
           {/* Only render the heavy EffectComposer on desktop */}
           {!isMobile && (
-            <EffectComposer disableNormalPass>
+            <EffectComposer>
               <Bloom luminanceThreshold={0.1} mipmapBlur intensity={1.5} />
               <Noise opacity={0.05} />
               <Vignette eskil={false} offset={0.1} darkness={1.1} />
