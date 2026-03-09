@@ -292,7 +292,7 @@ export default function HeroScene() {
                              style={{ boxShadow: pulsingHouse === house.id ? `0 0 80px ${house.glowColor}` : 'none' }}>
                           <img src={house.sigil} alt={house.name} className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         </div>
-                        <span className={`text-[10px] md:text-sm tracking-[0.3em] uppercase font-bold transition-colors ${house.textColor} opacity-60 group-hover:opacity-100`}>
+                        <span className="text-[10px] md:text-sm tracking-[0.3em] uppercase font-bold transition-colors text-gray-300 group-hover:text-white opacity-60 group-hover:opacity-100">
                           {house.name}
                         </span>
                       </motion.button>
