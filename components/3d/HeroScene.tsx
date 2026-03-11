@@ -117,12 +117,12 @@ export default function HeroScene() {
   };
 
   const handleSigilClick = (houseId: string) => {
-    if (activeHouse === houseId) return; // Prevent double click
+    if (activeHouse === houseId) return; 
     setPulsingHouse(houseId);
     setTimeout(() => {
       setActiveHouse(houseId);
       setPulsingHouse(null);
-    }, 600); // Wait for pulse animation to finish before unfurling
+    }, 600); 
   };
 
   const currentHouseData = HOUSES.find(h => h.id === activeHouse);
@@ -203,20 +203,36 @@ export default function HeroScene() {
         )}
       </AnimatePresence>
 
-      {/* 4. EXPEDITIONS OVERLAY (Unchanged) */}
+      {/* 4. EXPEDITIONS OVERLAY (Scroll Fixed) */}
       <AnimatePresence>
         {showProjects && (
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="absolute inset-0 z-30 bg-black/95 backdrop-blur-3xl flex flex-col items-center p-6 pt-24 md:p-20 overflow-y-auto pointer-events-auto">
-            <div className="w-full max-w-7xl relative">
-              <button onClick={() => setShowProjects(false)} className="fixed md:absolute top-6 md:-top-10 right-6 md:right-0 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-50">
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl overflow-y-auto pointer-events-auto block">
+            <div className="w-full max-w-7xl mx-auto relative min-h-screen p-6 pt-24 md:p-20 pb-48">
+              
+              <button onClick={() => setShowProjects(false)} className="fixed top-6 right-6 md:top-10 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-[100]">
                 [ Return ]
               </button>
+              
               <div className="mb-10 md:mb-16 border-b border-white/10 pb-6 md:pb-8">
                 <h2 className="text-orange-500 tracking-[0.5em] uppercase text-xs md:text-sm font-bold mb-2 md:mb-4 italic">Expeditions</h2>
                 <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-widest leading-tight">Major Works & Hackathons</h3>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-32">
-                {/* SafeHorizon */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                
+                {/* 1. Dyslexia Risk AI */}
+                <a href="#" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-gray-400 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-white/10 w-max px-2 py-1">Deep Learning</span>
+                    <h4 className="text-xl md:text-2xl text-white font-bold uppercase tracking-wider mb-3 group-hover:text-orange-400 transition-colors">Dyslexia Risk AI</h4>
+                    <p className="text-gray-400 text-xs md:text-sm tracking-wide leading-relaxed mb-6 uppercase">Predictive model using LSTM networks to analyze handwriting sequences. Improved accuracy by 15% via image preprocessing.</p>
+                  </div>
+                  <div className="text-[9px] md:text-[10px] tracking-widest text-gray-500 font-bold flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                    <span>TensorFlow / OpenCV</span>
+                    <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
+                  </div>
+                </a>
+                
+                {/* 2. SafeHorizon */}
                 <a href="https://github.com/Arjun13-git/Disaster_Alert_Mgt" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
                   <div>
                     <span className="text-orange-500/80 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-orange-500/30 w-max px-2 py-1 bg-orange-500/10">Hackathon</span>
@@ -228,21 +244,74 @@ export default function HeroScene() {
                     <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
                   </div>
                 </a>
+
+                {/* 3. Project Aether */}
+                <a href="https://github.com/Arjun13-git/Project-Aether" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-gray-400 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-white/10 w-max px-2 py-1">Major Project</span>
+                    <h4 className="text-xl md:text-2xl text-white font-bold uppercase tracking-wider mb-3 group-hover:text-orange-400 transition-colors">Project AETHER</h4>
+                    <p className="text-gray-400 text-xs md:text-sm tracking-wide leading-relaxed mb-6 uppercase">Autonomous surveillance platform simulating defense workflows for satellite & aerial imagery.</p>
+                  </div>
+                  <div className="text-[9px] md:text-[10px] tracking-widest text-gray-500 font-bold flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                    <span>Python / YOLOv8</span>
+                    <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
+                  </div>
+                </a>
+
+                {/* 4. HC-402 KYC */}
+                <a href="https://github.com/aniprogramer/hc402-kyc-platform" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-orange-500/80 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-orange-500/30 w-max px-2 py-1 bg-orange-500/10">Hackathon</span>
+                    <h4 className="text-xl md:text-2xl text-white font-bold uppercase tracking-wider mb-3 group-hover:text-orange-400 transition-colors">HC-402 KYC</h4>
+                    <p className="text-gray-400 text-xs md:text-sm tracking-wide leading-relaxed mb-6 uppercase">Automated Digital KYC and Secure Onboarding Platform built during a February hackathon.</p>
+                  </div>
+                  <div className="text-[9px] md:text-[10px] tracking-widest text-gray-500 font-bold flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                    <span>Security / Auth</span>
+                    <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
+                  </div>
+                </a>
+
+                {/* 5. Sentinel Agents */}
+                <a href="https://github.com/aniprogramer/sentinel-agents" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-orange-500/80 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-orange-500/30 w-max px-2 py-1 bg-orange-500/10">Hackathon</span>
+                    <h4 className="text-xl md:text-2xl text-white font-bold uppercase tracking-wider mb-3 group-hover:text-orange-400 transition-colors">Sentinel Agents</h4>
+                    <p className="text-gray-400 text-xs md:text-sm tracking-wide leading-relaxed mb-6 uppercase">Cybersecurity-focused agentic system designed to monitor and defend digital perimeters.</p>
+                  </div>
+                  <div className="text-[9px] md:text-[10px] tracking-widest text-gray-500 font-bold flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                    <span>Agentic AI / Security</span>
+                    <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
+                  </div>
+                </a>
+
+                {/* 6. PromptGuard */}
+                <a href="https://github.com/Arjun13-git/PromptGuard" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-orange-500/80 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-orange-500/30 w-max px-2 py-1 bg-orange-500/10">Hackathon</span>
+                    <h4 className="text-xl md:text-2xl text-white font-bold uppercase tracking-wider mb-3 group-hover:text-orange-400 transition-colors">PromptGuard</h4>
+                    <p className="text-gray-400 text-xs md:text-sm tracking-wide leading-relaxed mb-6 uppercase">Defense mechanism engineered to protect LLMs against malicious prompt injection attacks.</p>
+                  </div>
+                  <div className="text-[9px] md:text-[10px] tracking-widest text-gray-500 font-bold flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                    <span>LLM / Security</span>
+                    <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
+                  </div>
+                </a>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 5. THE FORGE (MANUSCRIPTS & SIGILS) */}
+      {/* 5. THE FORGE (Scroll Fixed) */}
       <AnimatePresence>
         {showSkills && (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-            className="absolute inset-0 z-30 bg-black/95 backdrop-blur-3xl flex flex-col items-center p-6 pt-24 md:p-20 overflow-y-auto pointer-events-auto"
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl overflow-y-auto pointer-events-auto block"
           >
-            <div className="w-full max-w-6xl relative h-full flex flex-col">
-              <button onClick={() => setShowSkills(false)} className="fixed md:absolute top-6 md:-top-10 right-6 md:right-0 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-50">
+            <div className="w-full max-w-6xl mx-auto relative min-h-screen p-6 pt-24 md:p-20 pb-48">
+              
+              <button onClick={() => setShowSkills(false)} className="fixed top-6 right-6 md:top-10 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-[100]">
                 [ Return ]
               </button>
 
@@ -262,9 +331,9 @@ export default function HeroScene() {
                 </a>
               </div>
 
-              {/* SIGIL GALLERY (Massive Emblems) */}
+              {/* SIGIL GALLERY */}
               {!activeHouse && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col items-center justify-center gap-16 pb-20">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center gap-16 pb-20 mt-10">
                   <p className="text-gray-500 tracking-[0.4em] uppercase text-sm font-bold text-center border-b border-white/5 pb-4">Select a House to Unroll the Manuscripts</p>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 w-full max-w-5xl px-4">
@@ -276,7 +345,6 @@ export default function HeroScene() {
                         whileTap={{ scale: 0.95 }}
                         className="relative flex flex-col items-center gap-6 group"
                       >
-                        {/* The Magic Pulse */}
                         <AnimatePresence>
                           {pulsingHouse === house.id && (
                             <motion.div 
@@ -287,7 +355,6 @@ export default function HeroScene() {
                           )}
                         </AnimatePresence>
 
-                        {/* MASSIVE SIGILS */}
                         <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-white/5 bg-black/50 flex items-center justify-center p-6 transition-all duration-500 group-hover:border-white/30 group-hover:bg-white/5 shadow-2xl" 
                              style={{ boxShadow: pulsingHouse === house.id ? `0 0 80px ${house.glowColor}` : 'none' }}>
                           <img src={house.sigil} alt={house.name} className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
@@ -306,17 +373,14 @@ export default function HeroScene() {
                 {activeHouse && currentHouseData && (
                   <motion.div 
                     key="manuscript"
-                    // HEIGHT ANIMATION creates the realistic physical roll unfurl
                     initial={{ height: 0, opacity: 0.5 }} 
                     animate={{ height: "auto", opacity: 1 }} 
                     exit={{ height: 0, opacity: 0, transition: { duration: 0.4, ease: "easeInOut" } }} 
                     transition={{ duration: 0.7, ease: "easeInOut" }}
-                    // PARCHMENT STYLING
-                    className={`w-full max-w-3xl mx-auto overflow-hidden border-y-8 border-double ${currentHouseData.themeBorder} relative mt-10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] bg-[#e8dcc4] bg-[url('/images/parchment.jpg')] bg-cover bg-center text-slate-900 rounded-sm`}
+                    className={`w-full max-w-3xl mx-auto overflow-hidden border-y-8 border-double ${currentHouseData.themeBorder} relative mt-10 mb-20 shadow-[0_20px_50px_rgba(0,0,0,0.8)] bg-[#e8dcc4] bg-[url('/images/parchment.jpeg')] bg-cover bg-center text-slate-900 rounded-sm`}
                     style={{ transformOrigin: "top" }}
                   >
                     <div className="p-8 md:p-16 flex flex-col items-center relative z-10">
-                      {/* Faint Sigil Watermark on the paper */}
                       <img src={currentHouseData.sigil} alt="Sigil watermark" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 md:w-96 opacity-[0.07] pointer-events-none grayscale mix-blend-multiply" />
                       
                       <h3 className={`text-3xl md:text-5xl font-black uppercase tracking-[0.3em] mb-2 ${currentHouseData.inkColor} text-center font-serif drop-shadow-sm`}>
@@ -331,7 +395,6 @@ export default function HeroScene() {
                           <motion.span 
                             key={skill} 
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 + (index * 0.05) }} 
-                            // Looks like ink stamps on the paper
                             className={`px-5 py-3 bg-transparent border-2 ${currentHouseData.themeBorder} text-xs md:text-sm tracking-widest uppercase ${currentHouseData.inkColor} font-bold shadow-sm hover:bg-black/5 transition-colors`}
                           >
                             {skill}
@@ -355,14 +418,16 @@ export default function HeroScene() {
         )}
       </AnimatePresence>
 
-      {/* 6. ABOUT OVERLAY (Unchanged) */}
+      {/* 6. ABOUT OVERLAY (Scroll Fixed) */}
       <AnimatePresence>
         {showAbout && (
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="absolute inset-0 z-30 bg-black/95 backdrop-blur-xl flex items-center justify-center p-6 pt-24 md:p-16 overflow-y-auto pointer-events-auto">
-            <button onClick={() => setShowAbout(false)} className="fixed md:absolute top-6 md:top-10 right-6 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-50">
-              [ Close ]
-            </button>
-            <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-8 md:gap-12 items-center h-full pb-20 md:pb-0 pt-10 md:pt-0">
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl overflow-y-auto pointer-events-auto block">
+            <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 md:gap-12 items-center min-h-screen p-6 pt-24 md:p-16 pb-32 relative">
+              
+              <button onClick={() => setShowAbout(false)} className="fixed top-6 right-6 md:top-10 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-[100]">
+                [ Close ]
+              </button>
+              
               <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col gap-6">
                 <div className="bg-white/5 border border-white/10 p-6 md:p-8 rounded-sm backdrop-blur-sm">
                   <h3 className="text-orange-500 tracking-[0.4em] uppercase text-[10px] md:text-sm font-bold mb-4 italic">The Architect</h3>

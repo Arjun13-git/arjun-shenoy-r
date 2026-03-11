@@ -6,7 +6,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
-// --- NEW: THE DRAGONSTONE 3D BACKGROUND ---
+// --- THE DRAGONSTONE 3D BACKGROUND ---
 function Dragonstone() {
   const { scene } = useGLTF("/models/dragonstone/dragonstone.gltf");
   const group = useRef<THREE.Group>(null);
@@ -22,8 +22,8 @@ function Dragonstone() {
     <group ref={group}>
       <primitive 
         object={scene} 
-        position={[0, -2, -8]} // -3 pushes it down so we see the seat, -8 pushes it back
-        scale={0.5}           // The sweet spot between 0.8 and 0.05
+        position={[0, -2, -8]} 
+        scale={0.5}           
       />
     </group>
   );
@@ -32,6 +32,9 @@ function Dragonstone() {
 
 export default function IntroSequence({ onComplete }: { onComplete: () => void }) {
   const [stage, setStage] = useState<'waiting' | 'playing'>('waiting');
+  
+  // NEW: Ref to hold the timeout so we can cancel it if the user skips
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const startSequence = () => {
     setStage('playing');
@@ -41,9 +44,18 @@ export default function IntroSequence({ onComplete }: { onComplete: () => void }
     audio.loop = true; 
     audio.play().catch(e => console.error("Audio blocked by browser:", e));
 
-    setTimeout(() => {
+    // Store the timer in the ref
+    timerRef.current = setTimeout(() => {
       onComplete();
     }, 14000);
+  };
+
+  // NEW: The bypass function
+  const skipSequence = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current); // Kill the 14-second background timer
+    }
+    onComplete(); // Immediately transition to the main realm
   };
 
   return (
@@ -53,19 +65,17 @@ export default function IntroSequence({ onComplete }: { onComplete: () => void }
         exit={{ opacity: 0, transition: { duration: 1.5, ease: "easeInOut" } }}
       >
         
-        {/* --- NEW: THE BACKGROUND CANVAS --- */}
-        {/* We drop the opacity to 30% so it acts like a dark, moody background */}
+        {/* --- THE BACKGROUND CANVAS --- */}
         <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
           <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-            <ambientLight intensity={0.1} color="#4a5568" /> {/* Cold blue light */}
-            <spotLight position={[5, 10, 5]} intensity={20} color="#ffaa00" /> {/* Fire accent */}
+            <ambientLight intensity={0.1} color="#4a5568" />
+            <spotLight position={[5, 10, 5]} intensity={20} color="#ffaa00" />
             <Suspense fallback={null}>
               <Dragonstone />
               <Environment preset="night" />
             </Suspense>
           </Canvas>
         </div>
-        {/* ---------------------------------- */}
 
         {/* STAGE 1: THE IGNITION SWITCH */}
         {stage === 'waiting' && (
@@ -90,6 +100,14 @@ export default function IntroSequence({ onComplete }: { onComplete: () => void }
         {stage === 'playing' && (
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
             
+            {/* NEW: The Skip Button */}
+            <button 
+              onClick={skipSequence}
+              className="absolute bottom-10 right-10 text-white/50 hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-xs font-bold transition-colors z-50"
+            >
+              [ Skip Intro ]
+            </button>
+
             <div className="relative w-48 h-48 md:w-64 md:h-64" style={{ perspective: "1000px" }}>
               <motion.div
                 className="w-full h-full relative"
