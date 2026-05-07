@@ -6,6 +6,7 @@ import { EffectComposer, Bloom, Noise, Vignette } from "@react-three/postprocess
 import { useRef, Suspense, useState, useEffect } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from '@emailjs/browser'; // NEW: Import EmailJS
 
 // --- THE GREAT HOUSES OF YOUR SKILLSET ---
 const HOUSES = [
@@ -94,15 +95,16 @@ export default function HeroScene() {
   const [showNav, setShowNav] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
   const [showSkills, setShowSkills] = useState(false);
-  const [showRavenry, setShowRavenry] = useState(false); // NEW: The Ravenry State
+  const [showRavenry, setShowRavenry] = useState(false);
   
   const [isMobile, setIsMobile] = useState(false);
   
   const [activeHouse, setActiveHouse] = useState<string | null>(null);
   const [pulsingHouse, setPulsingHouse] = useState<string | null>(null);
 
-  // NEW: Form submission state
+  // Form states
   const [ravenStatus, setRavenStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -118,7 +120,10 @@ export default function HeroScene() {
     setShowSkills(section === "skills");
     setShowRavenry(section === "ravenry");
     if (section === "skills") setActiveHouse(null);
-    if (section === "ravenry") setRavenStatus("idle");
+    if (section === "ravenry") {
+      setRavenStatus("idle");
+      setFormData({ name: '', email: '', message: '' });
+    }
   };
 
   const handleSigilClick = (houseId: string) => {
@@ -133,15 +138,41 @@ export default function HeroScene() {
     }, 400); 
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleSendRaven = (e: React.FormEvent) => {
     e.preventDefault();
     setRavenStatus("sending");
-    // Simulate network request
-    setTimeout(() => {
-      setRavenStatus("sent");
-      // Reset form after a few seconds
-      setTimeout(() => setRavenStatus("idle"), 4000);
-    }, 1500);
+
+    // Replace these 3 strings with your actual EmailJS keys!
+    const SERVICE_ID = "service_d4zrfpi";
+    const TEMPLATE_ID = "template_i2okbfn";
+    const PUBLIC_KEY = "DBNfqfZZL3-3bsKhK";
+
+    emailjs.send(
+      SERVICE_ID,
+      TEMPLATE_ID,
+      {
+        from_name: formData.name,
+        reply_to: formData.email,
+        message: formData.message,
+      },
+      PUBLIC_KEY
+    )
+    .then((response) => {
+       console.log('SUCCESS!', response.status, response.text);
+       setRavenStatus("sent");
+       setFormData({ name: '', email: '', message: '' }); // Clear the form
+       setTimeout(() => setRavenStatus("idle"), 5000); // Reset button after 5s
+    })
+    .catch((err) => {
+       console.log('FAILED...', err);
+       setRavenStatus("idle");
+       alert("The raven was intercepted by a storm. Please try again or use direct email.");
+    });
   };
 
   const currentHouseData = HOUSES.find(h => h.id === activeHouse);
@@ -216,7 +247,6 @@ export default function HeroScene() {
                 <button onClick={() => openSection("about")} className="text-xl md:text-2xl tracking-[0.3em] uppercase text-gray-400 hover:text-white transition-colors">The Archives</button>
                 <button onClick={() => openSection("projects")} className="text-xl md:text-2xl tracking-[0.3em] uppercase text-gray-400 hover:text-white transition-colors">Expeditions</button>
                 <button onClick={() => openSection("skills")} className="text-xl md:text-2xl tracking-[0.3em] uppercase text-gray-400 hover:text-white transition-colors">The Forge</button>
-                {/* NEW NAVIGATION LINK */}
                 <button onClick={() => openSection("ravenry")} className="text-xl md:text-2xl tracking-[0.3em] uppercase text-orange-500 hover:text-orange-400 transition-colors">The Ravenry</button>
               </nav>
             </motion.div>
@@ -228,7 +258,6 @@ export default function HeroScene() {
       <AnimatePresence>
         {showProjects && (
            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl overflow-y-auto pointer-events-auto block">
-            {/* Same as previous code... keeping it intact */}
             <div className="w-full max-w-7xl mx-auto relative min-h-screen p-6 pt-24 md:p-20 pb-48">
               <button onClick={() => setShowProjects(false)} className="fixed top-6 right-6 md:top-10 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-[100]">[ Return ]</button>
               <div className="mb-10 md:mb-16 border-b border-white/10 pb-6 md:pb-8">
@@ -236,7 +265,19 @@ export default function HeroScene() {
                 <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-widest leading-tight">Major Works & Hackathons</h3>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                 {/* Project cards... */}
+                 {/* SafeHorizon */}
+                 <a href="https://github.com/Arjun13-git/Disaster_Alert_Mgt" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-orange-500/80 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-orange-500/30 w-max px-2 py-1 bg-orange-500/10">Hackathon</span>
+                    <h4 className="text-xl md:text-2xl text-white font-bold uppercase tracking-wider mb-3 group-hover:text-orange-400 transition-colors">SafeHorizon</h4>
+                    <p className="text-gray-400 text-xs md:text-sm tracking-wide leading-relaxed mb-6 uppercase">Real-time disaster alert management system leveraging Groq AI & NASA EONET data.</p>
+                  </div>
+                  <div className="text-[9px] md:text-[10px] tracking-widest text-gray-500 font-bold flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                    <span>AI / Fullstack</span>
+                    <span className="group-hover:text-white transition-colors">[ View Repo ]</span>
+                  </div>
+                </a>
+                 {/* Project Aether */}
                  <a href="https://github.com/Arjun13-git/Project-Aether" target="_blank" className="group bg-white/5 border border-white/10 p-6 md:p-8 hover:bg-white/10 hover:border-orange-500/50 transition-all flex flex-col justify-between h-full">
                   <div>
                     <span className="text-gray-400 text-[9px] md:text-[10px] tracking-widest uppercase mb-4 block font-bold border border-white/10 w-max px-2 py-1">Major Project</span>
@@ -258,7 +299,6 @@ export default function HeroScene() {
       <AnimatePresence>
         {showSkills && (
            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl overflow-y-auto pointer-events-auto block">
-             {/* Exact same Forge code from previous iteration */}
              <div className="w-full max-w-6xl mx-auto relative min-h-screen p-6 pt-24 md:p-20 pb-48">
               <button onClick={() => setShowSkills(false)} className="fixed top-6 right-6 md:top-10 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-[100]">[ Return ]</button>
               <div className="mb-10 md:mb-12 border-b border-orange-500/30 pb-6 md:pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative">
@@ -313,7 +353,7 @@ export default function HeroScene() {
         )}
       </AnimatePresence>
 
-      {/* 6. THE RAVENRY OVERLAY (NEW) */}
+      {/* 6. THE RAVENRY OVERLAY (Actual Email Sending) */}
       <AnimatePresence>
         {showRavenry && (
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl overflow-y-auto pointer-events-auto block">
@@ -385,7 +425,6 @@ export default function HeroScene() {
                 {/* Right Side: The Form */}
                 <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="bg-white/5 border border-white/10 p-8 md:p-12 relative overflow-hidden">
                   
-                  {/* Subtle background glow */}
                   <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
                   <h4 className="text-white text-xl md:text-2xl font-bold uppercase tracking-widest mb-2 relative z-10">Send a Raven</h4>
@@ -396,6 +435,9 @@ export default function HeroScene() {
                       <label className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Your Identity</label>
                       <input 
                         type="text" required placeholder="Jon Snow" 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
                         className="w-full bg-black/50 border border-white/10 p-4 text-white text-sm outline-none focus:border-orange-500/80 focus:bg-orange-500/5 transition-all shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"
                       />
                     </div>
@@ -404,6 +446,9 @@ export default function HeroScene() {
                       <label className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Return Address (Email)</label>
                       <input 
                         type="email" required placeholder="lordcommander@wall.com" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                         className="w-full bg-black/50 border border-white/10 p-4 text-white text-sm outline-none focus:border-orange-500/80 focus:bg-orange-500/5 transition-all shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"
                       />
                     </div>
@@ -412,6 +457,9 @@ export default function HeroScene() {
                       <label className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">The Message</label>
                       <textarea 
                         required placeholder="Winter is coming..." rows={5}
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
                         className="w-full bg-black/50 border border-white/10 p-4 text-white text-sm outline-none focus:border-orange-500/80 focus:bg-orange-500/5 transition-all resize-none shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"
                       ></textarea>
                     </div>
