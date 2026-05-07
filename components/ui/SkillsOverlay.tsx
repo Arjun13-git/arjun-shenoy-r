@@ -1,76 +1,32 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
+const HOUSES = [
+  { id: "stark", name: "House Stark", title: "Core Languages", sigil: "/images/stark.png", glowColor: "rgba(100, 200, 255, 0.8)", inkColor: "text-slate-900", themeBorder: "border-slate-800", skills: ["Java (DSA)", "Python", "C / C++", "JavaScript", "SQL", "HTML + CSS"] },
+  { id: "targaryen", name: "House Targaryen", title: "AI & Data Science", sigil: "/images/targaryen.png", glowColor: "rgba(255, 60, 0, 0.8)", inkColor: "text-red-950", themeBorder: "border-red-950", skills: ["TensorFlow", "Pandas", "NumPy", "OpenCV", "LangChain", "LangGraph", "LangFlow", "Agentic AI"] },
+  { id: "lannister", name: "House Lannister", title: "Web Frameworks", sigil: "/images/lannister.png", glowColor: "rgba(255, 200, 0, 0.8)", inkColor: "text-yellow-950", themeBorder: "border-yellow-900", skills: ["React.js", "Node.js", "Express.js", "Vite", "Flask"] },
+  { id: "baratheon", name: "House Baratheon", title: "Databases & Tooling", sigil: "/images/baratheon.png", glowColor: "rgba(255, 255, 255, 0.8)", inkColor: "text-stone-900", themeBorder: "border-stone-800", skills: ["MongoDB", "MySQL", "Git", "GitHub", "Jupyter", "VS Code", "Anaconda", "PyCharm"] }
+];
+
 interface SkillsOverlayProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// THE GREAT HOUSES OF YOUR SKILLSET
-const HOUSES = [
-  {
-    id: "stark",
-    name: "House Stark",
-    title: "Core Languages",
-    sigil: "/images/stark.png",
-    glowColor: "rgba(100, 200, 255, 0.8)", // Ice Blue
-    borderColor: "border-blue-500/50",
-    textColor: "text-blue-400",
-    bgColor: "bg-blue-900/10",
-    skills: ["Java (DSA)", "Python", "C / C++", "JavaScript", "SQL", "HTML + CSS"]
-  },
-  {
-    id: "targaryen",
-    name: "House Targaryen",
-    title: "AI & Data Science",
-    sigil: "/images/targaryen.png",
-    glowColor: "rgba(255, 60, 0, 0.8)", // Dragonfire Red
-    borderColor: "border-red-500/50",
-    textColor: "text-red-500",
-    bgColor: "bg-red-900/10",
-    skills: ["TensorFlow", "Pandas", "NumPy", "OpenCV", "LangChain", "LangGraph", "LangFlow", "Agentic AI"]
-  },
-  {
-    id: "lannister",
-    name: "House Lannister",
-    title: "Web Frameworks",
-    sigil: "/images/lannister.png",
-    glowColor: "rgba(255, 200, 0, 0.8)", // Lannister Gold
-    borderColor: "border-yellow-500/50",
-    textColor: "text-yellow-500",
-    bgColor: "bg-yellow-900/10",
-    skills: ["React.js", "Node.js", "Express.js", "Vite", "Flask"]
-  },
-  {
-    id: "baratheon",
-    name: "House Baratheon",
-    title: "Databases & Tooling",
-    sigil: "/images/baratheon.png",
-    glowColor: "rgba(255, 255, 255, 0.8)", // Storm Lightning White
-    borderColor: "border-gray-300/50",
-    textColor: "text-gray-200",
-    bgColor: "bg-gray-700/10",
-    skills: ["MongoDB", "MySQL", "Git", "GitHub", "Jupyter", "VS Code", "Anaconda", "PyCharm"]
-  }
-];
-
 export default function SkillsOverlay({ isOpen, onClose }: SkillsOverlayProps) {
   const [activeHouse, setActiveHouse] = useState<string | null>(null);
   const [pulsingHouse, setPulsingHouse] = useState<string | null>(null);
 
-  // Trigger the pulse effect, then unroll the manuscript
   const handleSigilClick = (houseId: string) => {
+    if (activeHouse === houseId) {
+      setActiveHouse(null);
+      return;
+    }
     setPulsingHouse(houseId);
     setTimeout(() => {
       setActiveHouse(houseId);
       setPulsingHouse(null);
-    }, 600); // 600ms pulse before opening
-  };
-
-  // Reset state when closing the overlay
-  const handleClose = () => {
-    onClose();
-    setTimeout(() => setActiveHouse(null), 500);
+    }, 400); 
   };
 
   const currentHouseData = HOUSES.find(h => h.id === activeHouse);
@@ -78,19 +34,10 @@ export default function SkillsOverlay({ isOpen, onClose }: SkillsOverlayProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }} 
-          animate={{ opacity: 1, scale: 1 }} 
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="absolute inset-0 z-30 bg-black/95 backdrop-blur-3xl flex flex-col items-center p-6 pt-24 md:p-20 overflow-y-auto pointer-events-auto"
-        >
-          <div className="w-full max-w-6xl relative h-full flex flex-col">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl overflow-y-auto pointer-events-auto block">
+          <div className="w-full max-w-6xl mx-auto relative min-h-screen p-6 pt-24 md:p-20 pb-48">
+            <button onClick={() => { onClose(); setActiveHouse(null); }} className="fixed top-6 right-6 md:top-10 md:right-10 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-[100]">[ Return ]</button>
             
-            <button onClick={handleClose} className="fixed md:absolute top-6 md:-top-10 right-6 md:right-0 text-white hover:text-orange-500 uppercase tracking-widest text-[10px] md:text-sm font-bold transition-colors bg-black/50 md:bg-transparent p-2 md:p-0 rounded-md z-50">
-              [ Return to Realm ]
-            </button>
-
-            {/* HEADER & RESUME BUTTON */}
             <div className="mb-10 md:mb-12 border-b border-orange-500/30 pb-6 md:pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative">
               <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50"></div>
               <div>
@@ -106,99 +53,44 @@ export default function SkillsOverlay({ isOpen, onClose }: SkillsOverlayProps) {
               </a>
             </div>
 
-            {/* PHASE 1: THE SIGIL GRID */}
-            {!activeHouse && (
-              <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="flex-1 flex flex-col items-center justify-center gap-12"
-              >
-                <p className="text-gray-500 tracking-[0.4em] uppercase text-xs font-bold text-center">Select a House to Unroll the Manuscripts</p>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-4xl px-4">
-                  {HOUSES.map((house) => (
-                    <motion.button
-                      key={house.id}
-                      onClick={() => handleSigilClick(house.id)}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="relative flex flex-col items-center gap-6 group"
-                    >
-                      {/* The Pulse Effect */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-start gap-8 md:gap-12 w-full mt-4">
+              <p className="text-gray-500 tracking-[0.4em] uppercase text-xs font-bold text-center border-b border-white/5 pb-4 w-full max-w-2xl">
+                {activeHouse ? "Select a House to switch manuscripts" : "Select a House to unroll its manuscript"}
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 w-full max-w-5xl px-4">
+                {HOUSES.map((house) => {
+                  const isActive = activeHouse === house.id;
+                  const isDimmed = activeHouse !== null && !isActive;
+                  return (
+                    <motion.button key={house.id} onClick={() => handleSigilClick(house.id)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} animate={{ opacity: isDimmed ? 0.4 : 1, scale: isDimmed ? 0.9 : (isActive ? 1.05 : 1) }} transition={{ duration: 0.3 }} className="relative flex flex-col items-center gap-4 group">
                       <AnimatePresence>
                         {pulsingHouse === house.id && (
-                          <motion.div 
-                            initial={{ scale: 0.8, opacity: 0.8 }}
-                            animate={{ scale: 2.5, opacity: 0 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="absolute top-8 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full pointer-events-none mix-blend-screen blur-md"
-                            style={{ backgroundColor: house.glowColor }}
-                          />
+                          <motion.div initial={{ scale: 0.5, opacity: 1 }} animate={{ scale: 2.5, opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5, ease: "easeOut" }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 md:w-32 md:h-32 rounded-full pointer-events-none mix-blend-screen blur-xl" style={{ backgroundColor: house.glowColor }} />
                         )}
                       </AnimatePresence>
-
-                      {/* Sigil Image Container */}
-                      <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full border border-white/10 bg-black/50 flex items-center justify-center p-4 transition-all duration-500 group-hover:border-white/40"
-                           style={{ boxShadow: pulsingHouse === house.id ? `0 0 50px ${house.glowColor}` : 'none' }}>
-                        {/* Fallback to emoji if image fails/is missing, but expects the PNG */}
-                        <img src={house.sigil} alt={house.name} className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
-                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                      <div className={`relative w-24 h-24 md:w-32 md:h-32 rounded-full border-2 bg-black/50 flex items-center justify-center p-4 transition-all duration-500 shadow-xl ${isActive ? 'border-white/50 bg-white/10' : 'border-white/5 group-hover:border-white/30'}`} style={{ boxShadow: pulsingHouse === house.id ? `0 0 80px ${house.glowColor}` : 'none' }}>
+                        <img src={house.sigil} alt={house.name} className={`w-full h-full object-contain transition-opacity drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] ${isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                       </div>
-                      <span className={`text-[10px] md:text-xs tracking-[0.3em] uppercase font-bold transition-colors ${house.textColor} opacity-70 group-hover:opacity-100`}>
-                        {house.name}
-                      </span>
+                      <span className="text-[10px] md:text-xs tracking-[0.3em] uppercase font-bold transition-colors text-gray-300 group-hover:text-white opacity-80">{house.name}</span>
                     </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
+                  );
+                })}
+              </div>
+            </motion.div>
 
-            {/* PHASE 2: THE UNROLLING MANUSCRIPT */}
             <AnimatePresence mode="wait">
               {activeHouse && currentHouseData && (
-                <motion.div 
-                  key="manuscript"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0, transition: { duration: 0.3 } }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} // Smooth unfurl easing
-                  className={`w-full max-w-3xl mx-auto overflow-hidden border-y ${currentHouseData.borderColor} ${currentHouseData.bgColor} relative`}
-                  style={{ transformOrigin: "top" }}
-                >
-                  {/* Decorative Manuscript Roll tops/bottoms */}
-                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-black via-gray-700 to-black opacity-50"></div>
-                  <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-black via-gray-700 to-black opacity-50"></div>
-
-                  <div className="p-8 md:p-12 flex flex-col items-center">
-                    <img src={currentHouseData.sigil} alt="Sigil watermark" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 opacity-5 pointer-events-none grayscale" />
-                    
-                    <h3 className={`text-2xl md:text-4xl font-black uppercase tracking-[0.3em] mb-2 ${currentHouseData.textColor} drop-shadow-lg text-center`}>
-                      {currentHouseData.name}
-                    </h3>
-                    <h4 className="text-gray-400 tracking-[0.4em] uppercase text-xs md:text-sm mb-10 text-center border-b border-white/10 pb-4 px-8">
-                      {currentHouseData.title}
-                    </h4>
-
-                    <div className="flex flex-wrap justify-center gap-4 relative z-10 w-full">
+                <motion.div key="manuscript" initial={{ height: 0, opacity: 0, marginTop: 0 }} animate={{ height: "auto", opacity: 1, marginTop: "4rem" }} exit={{ height: 0, opacity: 0, marginTop: 0, transition: { duration: 0.3, ease: "easeInOut" } }} transition={{ duration: 0.6, ease: "easeInOut" }} className={`w-full max-w-4xl mx-auto overflow-hidden border-y-[6px] border-double ${currentHouseData.themeBorder} relative shadow-[0_20px_50px_rgba(0,0,0,0.8)] bg-gradient-to-br from-[#fdfbf7] via-[#e8dcc4] to-[#d4c391] text-slate-900 rounded-sm mb-20`} style={{ transformOrigin: "top", boxShadow: "inset 0 0 60px rgba(166,138,86,0.4), 0 20px 50px rgba(0,0,0,0.8)" }}>
+                  <div className="p-8 md:p-16 flex flex-col items-center relative z-10">
+                    <img src={currentHouseData.sigil} alt="Sigil watermark" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-80 opacity-[0.06] pointer-events-none grayscale mix-blend-multiply" />
+                    <h3 className={`text-2xl md:text-4xl font-black uppercase tracking-[0.2em] mb-2 ${currentHouseData.inkColor} text-center font-serif drop-shadow-sm`}>{currentHouseData.name}</h3>
+                    <h4 className={`tracking-[0.3em] uppercase text-[10px] md:text-xs mb-10 text-center border-b-2 ${currentHouseData.themeBorder} pb-4 px-10 ${currentHouseData.inkColor} font-bold opacity-80`}>{currentHouseData.title}</h4>
+                    <div className="flex flex-wrap justify-center gap-3 md:gap-5 relative z-10 w-full max-w-2xl">
                       {currentHouseData.skills.map((skill, index) => (
-                        <motion.span 
-                          key={skill}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.3 + (index * 0.05) }} // Staggered text fade-in
-                          className={`px-4 py-2 bg-black/80 border ${currentHouseData.borderColor} text-xs md:text-sm tracking-widest uppercase text-gray-200 shadow-lg`}
-                        >
-                          {skill}
-                        </motion.span>
+                        <motion.span key={skill} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + (index * 0.05) }} className={`px-4 py-2 bg-transparent border-2 ${currentHouseData.themeBorder} text-[10px] md:text-xs tracking-widest uppercase ${currentHouseData.inkColor} font-bold shadow-sm hover:bg-black/5 transition-colors`}>{skill}</motion.span>
                       ))}
                     </div>
-
-                    <button 
-                      onClick={() => setActiveHouse(null)}
-                      className="mt-16 text-[10px] md:text-xs tracking-[0.4em] uppercase text-gray-500 hover:text-white transition-colors border border-gray-600/50 hover:border-white px-6 py-2"
-                    >
-                      Fold Manuscript
-                    </button>
+                    <button onClick={() => setActiveHouse(null)} className={`mt-12 text-[9px] md:text-[10px] tracking-[0.4em] uppercase hover:bg-black/10 transition-colors border-2 ${currentHouseData.themeBorder} ${currentHouseData.inkColor} font-bold px-6 py-2`}>Refurl Manuscript</button>
                   </div>
                 </motion.div>
               )}
