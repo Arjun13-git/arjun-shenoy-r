@@ -2,10 +2,46 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const HOUSES = [
-  { id: "stark", name: "House Stark", title: "Core Languages", sigil: "/images/stark.png", glowColor: "rgba(100, 200, 255, 0.8)", inkColor: "text-slate-900", themeBorder: "border-slate-800", skills: ["Java (DSA)", "Python", "C / C++", "JavaScript", "SQL", "HTML + CSS"] },
-  { id: "targaryen", name: "House Targaryen", title: "AI & Data Science", sigil: "/images/targaryen.png", glowColor: "rgba(255, 60, 0, 0.8)", inkColor: "text-red-950", themeBorder: "border-red-950", skills: ["TensorFlow", "Pandas", "NumPy", "OpenCV", "LangChain", "LangGraph", "LangFlow", "Agentic AI"] },
-  { id: "lannister", name: "House Lannister", title: "Web Frameworks", sigil: "/images/lannister.png", glowColor: "rgba(255, 200, 0, 0.8)", inkColor: "text-yellow-950", themeBorder: "border-yellow-900", skills: ["React.js", "Node.js", "Express.js", "Vite", "Flask"] },
-  { id: "baratheon", name: "House Baratheon", title: "Databases & Tooling", sigil: "/images/baratheon.png", glowColor: "rgba(255, 255, 255, 0.8)", inkColor: "text-stone-900", themeBorder: "border-stone-800", skills: ["MongoDB", "MySQL", "Git", "GitHub", "Jupyter", "VS Code", "Anaconda", "PyCharm"] }
+  { 
+    id: "stark", 
+    name: "House Stark", 
+    title: "Core Languages", 
+    sigil: "/images/stark.png", 
+    glowColor: "rgba(100, 200, 255, 0.8)", 
+    inkColor: "text-slate-900", 
+    themeBorder: "border-slate-800", 
+    skills: ["Java (DSA)", "Python", "TypeScript", "C / C++", "JavaScript", "SQL", "HTML + CSS"] 
+  },
+  { 
+    id: "targaryen", 
+    name: "House Targaryen", 
+    title: "AI & Quantum ML", 
+    sigil: "/images/targaryen.png", 
+    glowColor: "rgba(255, 60, 0, 0.8)", 
+    inkColor: "text-red-950", 
+    themeBorder: "border-red-950", 
+    skills: ["TensorFlow", "PennyLane", "Qiskit", "TenSEAL", "YOLOv8", "LangChain", "Agentic AI", "NLP", "Pandas", "NumPy", "OpenCV"] 
+  },
+  { 
+    id: "lannister", 
+    name: "House Lannister", 
+    title: "Web & 3D Frameworks", 
+    sigil: "/images/lannister.png", 
+    glowColor: "rgba(255, 200, 0, 0.8)", 
+    inkColor: "text-yellow-950", 
+    themeBorder: "border-yellow-900", 
+    skills: ["Next.js", "React.js", "Three.js (R3F)", "Tailwind CSS", "Framer Motion", "Node.js", "Express.js", "Flask"] 
+  },
+  { 
+    id: "baratheon", 
+    name: "House Baratheon", 
+    title: "Security, DBs & Tooling", 
+    sigil: "/images/baratheon.png", 
+    glowColor: "rgba(255, 255, 255, 0.8)", 
+    inkColor: "text-stone-900", 
+    themeBorder: "border-stone-800", 
+    skills: ["FHE / Cryptography", "Cybersecurity", "MongoDB", "MySQL", "Git / GitHub", "Jupyter", "VS Code", "Anaconda"] 
+  }
 ];
 
 interface SkillsOverlayProps {
